@@ -23,12 +23,22 @@ public class Base64ValidationIntegratedTest {
     public Validator validator;
 
     @Test
-    public void shoul_return_validation_constraint_to_invalid_base64() {
+    public void should_return_validation_constraint_to_invalid_base64() {
 
         JsonData data = new JsonData("%aaa%");
 
         Set<ConstraintViolation<JsonData>> violations = validator.validate(data);
 
         assertEquals("The value must be a valid base 64 string.", violations.iterator().next().getMessage());
+    }
+
+    @Test
+    public void should_return_empty_validation_constraint_to_valid_base64() {
+
+        JsonData data = new JsonData("aaa");
+
+        Set<ConstraintViolation<JsonData>> violations = validator.validate(data);
+
+        assertTrue(violations.isEmpty());
     }
 }
