@@ -1,10 +1,13 @@
 package com.waes.base64compare.domain.dto;
 
+import com.waes.base64compare.domain.validator.Base64;
+
 import javax.validation.constraints.NotEmpty;
 
 public class JsonData {
 
     @NotEmpty
+    @Base64
     private String base64;
 
     public JsonData() {
