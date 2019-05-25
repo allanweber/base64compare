@@ -41,4 +41,16 @@ public class Base64ValidationIntegratedTest {
 
         assertTrue(violations.isEmpty());
     }
+
+    @Test
+    public void should_return_empty_validation_constraint_to_null_base64() {
+
+        JsonData data = new JsonData();
+
+        Set<ConstraintViolation<JsonData>> violations = validator.validate(data);
+
+        // Is returning only the validation for @NotNull
+        assertEquals(1, violations.size());
+        assertEquals("must not be empty", violations.iterator().next().getMessage());
+    }
 }
