@@ -12,6 +12,9 @@ public class Base64Validation implements ConstraintValidator<Base64, String> {
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
 
+        if(value == null)
+            return true;
+
         boolean isValid = org.apache.commons.codec.binary.Base64.isBase64(value);
 
         return isValid;
