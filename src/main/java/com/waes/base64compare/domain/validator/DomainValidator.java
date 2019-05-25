@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public class DomainValidator<T> implements IValidator<T> {
+
     private Validator validator;
 
     public DomainValidator() {
