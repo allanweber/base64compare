@@ -48,6 +48,6 @@ public class DiffController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<?> getResult(@PathVariable("id") String id) {
-        return null;
+        return ResponseEntity.ok(null);
     }
 }
