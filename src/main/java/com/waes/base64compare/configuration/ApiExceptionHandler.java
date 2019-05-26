@@ -8,9 +8,17 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+/**
+ * Configurations to correct format response return of any exception in the rest context.
+ */
 @ControllerAdvice
 public class ApiExceptionHandler {
 
+    /**
+     * Handle and format any treated application exception.
+     * @param ex custom exception that inherit from Exception.
+     * @return Http status 400 and a json of ExceptionResponse.
+     */
     @ExceptionHandler(value = {
             ApiException.class,
             MethodArgumentNotValidException.class
@@ -19,6 +27,11 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Handle and format any not treated application exception.
+     * @param ex is any not treated exception.
+     * @return Http status 500 and a json of ExceptionResponse.
+     */
     @ExceptionHandler(value = {Exception.class})
     protected ResponseEntity<ExceptionResponse> handleException(Exception ex) {
         return new ResponseEntity<>(

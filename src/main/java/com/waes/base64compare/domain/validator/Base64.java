@@ -9,12 +9,19 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
 
+/**
+ * Annotation responsible for validate base64 data format.
+ */
 @Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = Base64Validation.class)
 @Documented
 public @interface Base64 {
 
+    /**
+     * Default error message.
+     * @return
+     */
     String message() default "The value must be a valid base 64 string.";
 
     Class<?>[] groups() default { };

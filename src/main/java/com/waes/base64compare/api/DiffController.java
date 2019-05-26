@@ -14,6 +14,10 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+/**
+ * Controller responsible for manage the comparison between base64.
+ */
+
 @ApiResponses(value = {
         @ApiResponse(code = 400, message = "An error occurred", response = ExceptionResponse.class)
 })
@@ -22,6 +26,15 @@ import java.net.URISyntaxException;
 @Validated
 public class DiffController {
 
+    /**
+     * Responsible for receive the left side of comparison.
+     *
+     * @param id   is the is of transaction, you need the same id for left and right sides.
+     * @param body contains the base64 string to compare.
+     * @see com.waes.base64compare.domain.dto.JsonData
+     * @return the response with status 201 and the sent body in success case or status 400 and exception message in case of fail.
+     * @throws URISyntaxException
+     */
     @ApiOperation(value = "Send left side base64 json", response = Boolean.class)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Left side base64 json successfully received")
@@ -32,6 +45,15 @@ public class DiffController {
         return ResponseEntity.created(new URI(id)).body(null);
     }
 
+    /**
+     * Responsible for receive the right side of comparison.
+     *
+     * @param id  is the is of transaction, you need the same id for left and right sides.
+     * @param body contains the base64 string to compare.
+     * @see com.waes.base64compare.domain.dto.JsonData
+     * @return the response with status 201 and the sent body in success case or status 400 and exception message in case of fail.
+     * @throws URISyntaxException
+     */
     @ApiOperation(value = "Send right side base64 json", response = Boolean.class)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Right side base64 json successfully received")
@@ -42,6 +64,12 @@ public class DiffController {
         return ResponseEntity.created(new URI(id)).body(null);
     }
 
+    /**
+     * Responsible for return the comparison status of left and right sides.
+     * @param id is the is of transaction, you need the same id for left and right sides.
+     * @return
+     * @see
+     */
     @ApiOperation(value = "Get the result of comparison", response = Boolean.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Comparison done")
