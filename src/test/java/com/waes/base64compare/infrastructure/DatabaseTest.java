@@ -27,32 +27,15 @@ public class DatabaseTest {
     }
 
     @Test
-    public void should_insert_value() {
+    public void should_save_value() {
         Database<DiffEntity> database = new Database<>();
         DiffEntity diff = new DiffEntity(1L);
         diff.setSide(Side.Left, "123");
         diff.setSide(Side.Right, "465");
-        database.insert( diff);
+        database.save( diff);
 
         DiffEntity get = database.get(1L);
         assertEquals(diff, get);
-    }
-
-    @Test
-    public void should_throw_DataBaseException_when_already_exist_key(){
-        Database<DiffEntity> database = new Database<>();
-        DiffEntity diff1 = new DiffEntity(1L);
-        diff1.setSide(Side.Left, "123");
-        diff1.setSide(Side.Right, "465");
-        database.insert( diff1);
-
-        DiffEntity diff2 = new DiffEntity(1L);
-        diff2.setSide(Side.Left, "789");
-        diff2.setSide(Side.Right, "654");
-
-        expectedException.expectMessage("Key 1 already exists.");
-        expectedException.expect(DataBaseException.class);
-        database.insert(diff1);
     }
 
     @Test
@@ -60,7 +43,17 @@ public class DatabaseTest {
         Database<DiffEntity> database = new Database<>();
         expectedException.expectMessage("Entity must not be null.");
         expectedException.expect(NullPointerException.class);
-        database.insert(null);
+        database.save(null);
+    }
+
+    @Test
+    public void should_throw_NullPointerException_when_insert_and_entity_id_is_null(){
+        Database<DiffEntity> database = new Database<>();
+        expectedException.expectMessage("Entity key must not be null.");
+        expectedException.expect(NullPointerException.class);
+        DiffEntity entity = new DiffEntity(1L);
+        ReflectionTestUtils.setField(entity,"id", null);
+        database.save(entity);
     }
 
     @Test
@@ -69,16 +62,16 @@ public class DatabaseTest {
         DiffEntity diff1 = new DiffEntity(1L);
         diff1.setSide(Side.Left, "123");
         diff1.setSide(Side.Right, "465");
-        database.insert( diff1);
+        database.save( diff1);
 
         DiffEntity diff2 = new DiffEntity(2L);
         diff2.setSide(Side.Left, "789");
         diff2.setSide(Side.Right, "654");
-        database.insert( diff2);
+        database.save( diff2);
 
         diff1.setSide(Side.Left, "allan");
         diff1.setSide(Side.Right, "weber");
-        database.update(diff1);
+        database.save(diff1);
 
         DiffEntity get1 = database.get(1L);
         assertEquals("allan", get1.getSide(Side.Left));
@@ -90,30 +83,11 @@ public class DatabaseTest {
     }
 
     @Test
-    public void should_throw_NullPointerException_when_update_and_entity_is_null(){
-        Database<DiffEntity> database = new Database<>();
-        expectedException.expectMessage("Entity must not be null.");
-        expectedException.expect(NullPointerException.class);
-        database.update(null);
-    }
-
-    @Test
-    public void should_throw_NullPointerException_when_get_and_entity_is_null(){
+    public void should_throw_NullPointerException_when_get_and_entity_id_is_null(){
         Database<DiffEntity> database = new Database<>();
         expectedException.expectMessage("Key must not be null.");
         expectedException.expect(NullPointerException.class);
         database.get(null);
     }
 
-    @Test
-    public void should_return_null_when_get_and_key_does_not_exist(){
-        Database<DiffEntity> database = new Database<>();
-        DiffEntity diff1 = new DiffEntity(1L);
-        diff1.setSide(Side.Left, "123");
-        diff1.setSide(Side.Right, "465");
-        database.insert( diff1);
-
-        DiffEntity get = database.get(2L);
-        assertNull(get);
-    }
 }

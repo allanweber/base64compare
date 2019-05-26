@@ -30,26 +30,9 @@ public class Database<T extends BaseEnity> {
      * @param entity Object based on BaseEntity. Must not be null. If Object is null throws NullPointerException.
      *               If the key already exists throws DataBaseException.
      */
-    public void insert(T entity){
+    public void save(T entity){
         Objects.requireNonNull(entity, "Entity must not be null.");
-
-        if(table.containsKey(entity.getId()))
-            throw new DataBaseException(String.format("Key %s already exists.", entity.getId()));
-
-        table.put(entity.getId(), entity);
-    }
-
-    /**
-     * update one entity
-     * @param entity Object based on BaseEntity. Must not be null. If Object is null throws NullPointerException.
-     *               If the key does not exists throws DataBaseException.
-     */
-    public void update(T entity){
-        Objects.requireNonNull(entity, "Entity must not be null.");
-
-        if(!table.containsKey(entity.getId()))
-            throw new DataBaseException(String.format("Key %s does not exists.", entity.getId()));
-
+        Objects.requireNonNull(entity.getId(), "Entity key must not be null.");
         table.put(entity.getId(), entity);
     }
 
