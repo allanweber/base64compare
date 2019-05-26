@@ -11,9 +11,6 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -32,11 +29,10 @@ public class DatabaseTest {
     @Test
     public void should_insert_value() {
         Database<DiffEntity> database = new Database<>();
-        Map<Side, String> base64 = new HashMap<>();
-        base64.put(Side.Left, "123");
-        base64.put(Side.Right, "465");
-        DiffEntity diff = new DiffEntity(1L, base64);
-        database.Insert( diff);
+        DiffEntity diff = new DiffEntity(1L);
+        diff.setSide(Side.Left, "123");
+        diff.setSide(Side.Right, "465");
+        database.insert( diff);
 
         DiffEntity get = database.get(1L);
         assertEquals(diff, get);
@@ -45,20 +41,18 @@ public class DatabaseTest {
     @Test
     public void should_throw_DataBaseException_when_already_exist_key(){
         Database<DiffEntity> database = new Database<>();
-        Map<Side, String> base64 = new HashMap<>();
-        base64.put(Side.Left, "123");
-        base64.put(Side.Right, "465");
-        DiffEntity diff1 = new DiffEntity(1L, base64);
-        database.Insert( diff1);
+        DiffEntity diff1 = new DiffEntity(1L);
+        diff1.setSide(Side.Left, "123");
+        diff1.setSide(Side.Right, "465");
+        database.insert( diff1);
 
-        base64 = new HashMap<>();
-        base64.put(Side.Left, "789");
-        base64.put(Side.Right, "654");
-        DiffEntity diff2 = new DiffEntity(1L, base64);
+        DiffEntity diff2 = new DiffEntity(1L);
+        diff2.setSide(Side.Left, "789");
+        diff2.setSide(Side.Right, "654");
 
         expectedException.expectMessage("Key 1 already exists.");
         expectedException.expect(DataBaseException.class);
-        database.Insert(diff1);
+        database.insert(diff1);
     }
 
     @Test
@@ -66,27 +60,25 @@ public class DatabaseTest {
         Database<DiffEntity> database = new Database<>();
         expectedException.expectMessage("Entity must not be null.");
         expectedException.expect(NullPointerException.class);
-        database.Insert(null);
+        database.insert(null);
     }
 
     @Test
     public void should_update_one_entity() {
         Database<DiffEntity> database = new Database<>();
-        Map<Side, String> base64 = new HashMap<>();
-        base64.put(Side.Left, "123");
-        base64.put(Side.Right, "465");
-        DiffEntity diff1 = new DiffEntity(1L, base64);
-        database.Insert( diff1);
+        DiffEntity diff1 = new DiffEntity(1L);
+        diff1.setSide(Side.Left, "123");
+        diff1.setSide(Side.Right, "465");
+        database.insert( diff1);
 
-        base64 = new HashMap<>();
-        base64.put(Side.Left, "789");
-        base64.put(Side.Right, "654");
-        DiffEntity diff2 = new DiffEntity(2L, base64);
-        database.Insert( diff2);
+        DiffEntity diff2 = new DiffEntity(2L);
+        diff2.setSide(Side.Left, "789");
+        diff2.setSide(Side.Right, "654");
+        database.insert( diff2);
 
-        diff1.SetSide(Side.Left, "allan");
-        diff1.SetSide(Side.Right, "weber");
-        database.Update(diff1);
+        diff1.setSide(Side.Left, "allan");
+        diff1.setSide(Side.Right, "weber");
+        database.update(diff1);
 
         DiffEntity get1 = database.get(1L);
         assertEquals("allan", get1.getSide(Side.Left));
@@ -102,7 +94,7 @@ public class DatabaseTest {
         Database<DiffEntity> database = new Database<>();
         expectedException.expectMessage("Entity must not be null.");
         expectedException.expect(NullPointerException.class);
-        database.Update(null);
+        database.update(null);
     }
 
     @Test
@@ -116,11 +108,10 @@ public class DatabaseTest {
     @Test
     public void should_return_null_when_get_and_key_does_not_exist(){
         Database<DiffEntity> database = new Database<>();
-        Map<Side, String> base64 = new HashMap<>();
-        base64.put(Side.Left, "123");
-        base64.put(Side.Right, "465");
-        DiffEntity diff1 = new DiffEntity(1L, base64);
-        database.Insert( diff1);
+        DiffEntity diff1 = new DiffEntity(1L);
+        diff1.setSide(Side.Left, "123");
+        diff1.setSide(Side.Right, "465");
+        database.insert( diff1);
 
         DiffEntity get = database.get(2L);
         assertNull(get);

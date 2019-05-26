@@ -26,11 +26,11 @@ public class Database<T extends BaseEnity> {
     }
 
     /**
-     * Insert new entity in the store.
+     * insert new entity in the store.
      * @param entity Object based on BaseEntity. Must not be null. If Object is null throws NullPointerException.
      *               If the key already exists throws DataBaseException.
      */
-    public void Insert(T entity){
+    public void insert(T entity){
         Objects.requireNonNull(entity, "Entity must not be null.");
 
         if(table.containsKey(entity.getId()))
@@ -40,11 +40,11 @@ public class Database<T extends BaseEnity> {
     }
 
     /**
-     * Update one entity
+     * update one entity
      * @param entity Object based on BaseEntity. Must not be null. If Object is null throws NullPointerException.
      *               If the key does not exists throws DataBaseException.
      */
-    public void Update(T entity){
+    public void update(T entity){
         Objects.requireNonNull(entity, "Entity must not be null.");
 
         if(!table.containsKey(entity.getId()))
