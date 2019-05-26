@@ -12,11 +12,18 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Collections;
 
+/**
+ * Configure swagger to document rest apis.
+ */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfiguration {
     private static final String apiBasePackage = "com.waes.base64compare";
 
+    /**
+     * Creates the builder of the swagger interface application.
+     * @return the builder.
+     */
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -28,6 +35,10 @@ public class SwaggerConfiguration {
                 .apiInfo(apiInfo());
     }
 
+    /**
+     * Creates the application info to show in swagger UI.
+     * @return application info.
+     */
     private ApiInfo apiInfo() {
         return new ApiInfo(
                 "Waes",

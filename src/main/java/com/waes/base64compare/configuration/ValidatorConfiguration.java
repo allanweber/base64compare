@@ -5,9 +5,16 @@ import com.waes.base64compare.domain.validator.IValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * A configuration responsible for create the bean to validate javax.validation classes.
+ */
 @Configuration
 public class ValidatorConfiguration {
 
+    /**
+     * Instance of some IValidator class with validate(T) method.
+     * @return a instance of DomainValidator.
+     */
     @Bean
     public IValidator getValidator(){
         return new DomainValidator();
