@@ -1,4 +1,4 @@
-package com.waes.base64compare.infrastructure;
+package com.waes.base64compare.infrastructure.repository;
 
 import com.waes.base64compare.domain.entity.BaseEnity;
 import com.waes.base64compare.domain.exception.DataBaseException;

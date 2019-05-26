@@ -3,6 +3,7 @@ package com.waes.base64compare.infrastructure;
 import com.waes.base64compare.domain.entity.DiffEntity;
 import com.waes.base64compare.domain.entity.Side;
 import com.waes.base64compare.domain.exception.DataBaseException;
+import com.waes.base64compare.infrastructure.repository.Database;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
