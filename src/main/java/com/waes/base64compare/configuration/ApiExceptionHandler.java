@@ -2,6 +2,7 @@ package com.waes.base64compare.configuration;
 
 import com.waes.base64compare.domain.dto.ExceptionResponse;
 import com.waes.base64compare.domain.exception.ApiException;
+import com.waes.base64compare.domain.exception.DataBaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,7 +22,8 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(value = {
             ApiException.class,
-            MethodArgumentNotValidException.class
+            MethodArgumentNotValidException.class,
+            DataBaseException.class
     })
     protected ResponseEntity<ExceptionResponse> handleApiException(Exception ex) {
         return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
