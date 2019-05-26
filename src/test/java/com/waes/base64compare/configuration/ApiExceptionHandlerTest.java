@@ -2,6 +2,7 @@ package com.waes.base64compare.configuration;
 
 import com.waes.base64compare.domain.dto.ExceptionResponse;
 import com.waes.base64compare.domain.exception.ApiException;
+import com.waes.base64compare.domain.exception.DataBaseException;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 
@@ -11,13 +12,20 @@ import static org.junit.Assert.assertTrue;
 public class ApiExceptionHandlerTest {
 
     @Test
-    public void should_return_400_for_expected_exception() {
+    public void should_return_400_for_ApiException_exception() {
         ApiException ex = new ApiException("any");
         ResponseEntity response = new ApiExceptionHandler().handleApiException(ex);
         assertEquals(400, response.getStatusCodeValue());
         assertEquals("any", ((ExceptionResponse) response.getBody()).getMessage());
     }
 
+    @Test
+    public void should_return_400_for_DataBaseException_exception() {
+        DataBaseException ex = new DataBaseException("any");
+        ResponseEntity response = new ApiExceptionHandler().handleApiException(ex);
+        assertEquals(400, response.getStatusCodeValue());
+        assertEquals("any", ((ExceptionResponse) response.getBody()).getMessage());
+    }
 
     @Test
     public void should_return_500_for_not_expected_exception() {

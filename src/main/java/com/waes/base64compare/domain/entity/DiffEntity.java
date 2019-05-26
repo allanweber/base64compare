@@ -16,34 +16,28 @@ public class DiffEntity extends BaseEnity {
 
     /**
      * Constructor used to manage the map lately.
-     * @param id unique to store.
+     * @param id unique to store, if null a NullPointerException will be thrown
      */
     public DiffEntity(Long id) {
-        setId(id);
+        setId(Objects.requireNonNull(id, "Id is a required parameter."));
         this.base64 = new HashMap<>();
     }
 
     /**
-     * Constructor used to manage map.
-     * @param id unique to store.
-     * @param base64 can set both, none, or only one side.
-     */
-    public DiffEntity(Long id, Map<Side, String> base64) {
-        this.setId(Objects.requireNonNull(id, "Id is a required parameter."));
-        this.base64 = Objects.requireNonNull(base64, "Base64 map is a required parameter.");
-    }
-
-    /**
      * Set one side of entity.
-     * @param side Side to set value.
-     * @param base64 value of the side.
+     *
+     * @param side   Side to set value. Throw exception when it is null.
+     * @param base64 value of the side. Throw exception when it is null.
      */
-    public void SetSide(Side side, String base64) {
+    public void setSide(Side side, String base64) {
+        Objects.requireNonNull(side, "Side is a required argument.");
+        Objects.requireNonNull(base64, "Base64 is a required argument.");
         this.base64.put(side, base64);
     }
 
     /**
      * Get value from one side.
+     *
      * @param side to get the value.
      * @return base64 value of the side, can return null if the side was not set.
      */
