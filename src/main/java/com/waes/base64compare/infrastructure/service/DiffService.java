@@ -4,12 +4,17 @@ import com.waes.base64compare.domain.dto.Difference;
 import com.waes.base64compare.domain.dto.DifferenceResponse;
 import com.waes.base64compare.domain.entity.DiffEntity;
 import com.waes.base64compare.domain.entity.Side;
+import com.waes.base64compare.domain.exception.ApiException;
 import com.waes.base64compare.domain.repository.IDiffRepository;
 import com.waes.base64compare.domain.service.IDiffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.Base64;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Service responsible to manage Diff entities and theirs sides.
@@ -60,7 +65,7 @@ public class DiffService implements IDiffService {
 
     /**
      * Return the result of the comparison of the sides of the DiffEntity.
-     *
+     * Throws exception if id does not exist or if one side is null or empty.
      * @param id is the is of the DiffEntity.
      * @return data regarding to difference evaluation.
      * @see com.waes.base64compare.domain.dto.DifferenceResponse
@@ -69,15 +74,23 @@ public class DiffService implements IDiffService {
     public DifferenceResponse getDifferences(Long id) {
         DiffEntity entity = repository.get(id);
 
-        String message = "The entity %s does not have the %s side.";
+        //Throw exception if id does not exist
+        if (entity == null) {
+            throw new ApiException(String.format("Diff %s id does not exist.", id));
+        }
 
         //Get both sides from DiffEntity
         String leftBase64 = entity.getSide(Side.Left);
         String rightBase64 = entity.getSide(Side.Right);
 
         //Validate if both sides are fill or throw a exception if any are not fill.
-        Objects.requireNonNull(leftBase64, String.format(message, id, Side.Left));
-        Objects.requireNonNull(rightBase64, String.format(message, id, Side.Right));
+        String message = "The entity %s does not have the %s side.";
+        if (StringUtils.isEmpty(leftBase64)) {
+            throw new ApiException(String.format(message, id, Side.Left));
+        }
+        if (StringUtils.isEmpty(rightBase64)) {
+            throw new ApiException(String.format(message, id, Side.Right));
+        }
 
         //Convert both sides to byte[] to check their equality or differences.
         byte[] left = Base64.getDecoder().decode(leftBase64);

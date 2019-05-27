@@ -4,6 +4,7 @@ import com.waes.base64compare.domain.dto.Difference;
 import com.waes.base64compare.domain.dto.DifferenceResponse;
 import com.waes.base64compare.domain.entity.DiffEntity;
 import com.waes.base64compare.domain.entity.Side;
+import com.waes.base64compare.domain.exception.ApiException;
 import com.waes.base64compare.domain.repository.IDiffRepository;
 import org.junit.Rule;
 import org.junit.Test;
@@ -76,7 +77,7 @@ public class DiffServiceTest {
     }
 
     @Test
-    public void should_throw_NullPointerException_when_getting_difference_and_right_is_null(){
+    public void should_throw_ApiException_when_getting_difference_and_right_is_null(){
         Long id = 1L;
         String base64 = "123456";
         DiffEntity existing = new DiffEntity(id);
@@ -85,12 +86,12 @@ public class DiffServiceTest {
         Mockito.when(repository.get(id)).thenReturn(existing);
 
         expectedException.expectMessage("The entity 1 does not have the Right side.");
-        expectedException.expect(NullPointerException.class);
+        expectedException.expect(ApiException.class);
         service.getDifferences(id);
     }
 
     @Test
-    public void should_throw_NullPointerException_when_getting_difference_and_left_is_null(){
+    public void should_throw_ApiException_when_getting_difference_and_left_is_null(){
         Long id = 1L;
         String base64 = "123456";
         DiffEntity existing = new DiffEntity(id);
@@ -99,7 +100,17 @@ public class DiffServiceTest {
         Mockito.when(repository.get(id)).thenReturn(existing);
 
         expectedException.expectMessage("The entity 1 does not have the Left side.");
-        expectedException.expect(NullPointerException.class);
+        expectedException.expect(ApiException.class);
+        service.getDifferences(id);
+    }
+
+    @Test
+    public void should_throw_ApiException_when_getting_difference_and_id_not_exist(){
+        Long id = 1L;
+        Mockito.when(repository.get(id)).thenReturn(null);
+
+        expectedException.expectMessage("Diff 1 id does not exist.");
+        expectedException.expect(ApiException.class);
         service.getDifferences(id);
     }
 
