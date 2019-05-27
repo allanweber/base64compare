@@ -1,15 +1,13 @@
 package com.waes.base64compare.api;
 
+import com.waes.base64compare.domain.dto.DifferenceResponse;
 import com.waes.base64compare.domain.dto.ExceptionResponse;
 import com.waes.base64compare.domain.dto.JsonData;
-import com.waes.base64compare.domain.validator.DomainValidator;
-import com.waes.base64compare.domain.validator.IValidator;
 import com.waes.base64compare.infrastructure.service.DiffService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -37,19 +35,12 @@ public class DiffController {
     private DiffService service;
 
     /**
-     *  Validator to body objects
-     */
-    private IValidator<JsonData> validator;
-
-    /**
      * Only possible constructor setting all dependencies. If any dependency was null a NullPointerException will be thrown.
      * @param service is the DiffService to manage difference process.
-     * @param validator is the DomainValidator to valid body data.
      */
     @Autowired
-    public DiffController(DiffService service, @Qualifier("JsonData") IValidator<JsonData> validator) {
+    public DiffController(DiffService service) {
         this.service = Objects.requireNonNull(service, "DiffService is a required dependency.");
-        this.validator = Objects.requireNonNull(validator, "DomainValidator is a required dependency.");
     }
 
     /**
@@ -69,7 +60,6 @@ public class DiffController {
     @RequestMapping(value = "/{id}/left", method = RequestMethod.POST, consumes = "application/json")
     ResponseEntity<?> sendLeft(@PathVariable("id") long id, @Valid @RequestBody JsonData body) throws URISyntaxException {
 
-        validator.validate(body);
         service.saveLeft(id, body.getBase64());
         return ResponseEntity.created(new URI(String.valueOf(id))).body(body);
     }
@@ -91,7 +81,6 @@ public class DiffController {
     @RequestMapping(value = "/{id}/right", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity<?> sendRight(@PathVariable("id") Long id, @Valid @RequestBody JsonData body) throws URISyntaxException {
 
-        validator.validate(body);
         service.saveRight(id, body.getBase64());
         return ResponseEntity.created(new URI(String.valueOf(id))).body(body);
     }
@@ -101,7 +90,7 @@ public class DiffController {
      * @param id is the is of transaction, you need the same id for left and right sides.
      * @return the response status 200 with DifferenceResponse object in body response or status 400 and exception message in case of fail.
      */
-    @ApiOperation(value = "Get the result of comparison", response = Boolean.class)
+    @ApiOperation(value = "Get the result of comparison", response = DifferenceResponse.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Comparison done")
     })

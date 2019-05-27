@@ -3,7 +3,6 @@ package com.waes.base64compare.api;
 import com.waes.base64compare.domain.dto.Difference;
 import com.waes.base64compare.domain.dto.DifferenceResponse;
 import com.waes.base64compare.domain.dto.JsonData;
-import com.waes.base64compare.domain.validator.IValidator;
 import com.waes.base64compare.infrastructure.service.DiffService;
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,9 +28,6 @@ public class DiffControllerTest {
     @Mock
     public DiffService service;
 
-    @Mock
-    public IValidator<JsonData> validator;
-
     @InjectMocks
     private DiffController controller;
 
@@ -39,21 +35,13 @@ public class DiffControllerTest {
     public void should_throw_NullPointerException_when_instantiate_with_null_service() {
         expectedException.expectMessage("DiffService is a required dependency.");
         expectedException.expect(NullPointerException.class);
-        new DiffController(null, null);
+        new DiffController(null);
     }
 
-    @Test
-    public void should_throw_NullPointerException_when_instantiate_with_null_validtor() {
-        expectedException.expectMessage("DomainValidator is a required dependency.");
-        expectedException.expect(NullPointerException.class);
-        new DiffController(service, null);
-    }
 
     @Test
     public void should_return_status_201_for_sendLeft() throws URISyntaxException {
         JsonData data = new JsonData("123456");
-
-        Mockito.doNothing().when(validator).validate(data);
 
         ResponseEntity response = controller.sendLeft(123L, data);
         assertEquals(201, response.getStatusCodeValue());
@@ -63,8 +51,6 @@ public class DiffControllerTest {
     @Test
     public void should_return_status_201_for_sendRight() throws URISyntaxException {
         JsonData data = new JsonData("123456");
-
-        Mockito.doNothing().when(validator).validate(data);
 
         ResponseEntity response = controller.sendRight(123L, data);
         assertEquals(201, response.getStatusCodeValue());
