@@ -2,6 +2,7 @@ package com.waes.base64compare.configuration;
 
 import com.waes.base64compare.domain.dto.ExceptionResponse;
 import com.waes.base64compare.domain.exception.ApiException;
+import com.waes.base64compare.domain.exception.ArrayNotEqualException;
 import com.waes.base64compare.domain.exception.DataBaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +18,15 @@ public class ApiExceptionHandler {
 
     /**
      * Handle and format any treated application exception.
+     *
      * @param ex custom exception that inherit from Exception.
      * @return Http status 400 and a json of ExceptionResponse.
      */
     @ExceptionHandler(value = {
             ApiException.class,
             MethodArgumentNotValidException.class,
-            DataBaseException.class
+            DataBaseException.class,
+            ArrayNotEqualException.class
     })
     protected ResponseEntity<ExceptionResponse> handleApiException(Exception ex) {
         return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
@@ -31,6 +34,7 @@ public class ApiExceptionHandler {
 
     /**
      * Handle and format any not treated application exception.
+     *
      * @param ex is any not treated exception.
      * @return Http status 500 and a json of ExceptionResponse.
      */
