@@ -10,6 +10,6 @@ public interface IValidator<T> {
      * Common validation method to all proposes.
      * @param data an object with some validation annotation (@NotEmpty, @Base64 for example).
      */
-    void Validate(T data);
+    void validate(T data);
 
 }

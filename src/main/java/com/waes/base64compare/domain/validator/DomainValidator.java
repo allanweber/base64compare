@@ -26,10 +26,10 @@ public class DomainValidator<T> implements IValidator<T> {
     }
 
     /**
-     * Validate action, in case of violations in the data expected, an ApiException will be thrown.
+     * validate action, in case of violations in the data expected, an ApiException will be thrown.
      * @param data an object with some validation annotation (@NotEmpty, @Base64 for example).
      */
-    public void Validate(T data) {
+    public void validate(T data) {
 
         Set<ConstraintViolation<T>> violations = validator.validate(
                 Optional.ofNullable(data).orElseThrow(

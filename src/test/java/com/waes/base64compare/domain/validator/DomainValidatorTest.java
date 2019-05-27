@@ -26,7 +26,7 @@ public class DomainValidatorTest {
     @Test
     public void should_successfully_validate_an_object(){
         JsonData data = new JsonData("any");
-        validator.Validate(data);
+        validator.validate(data);
     }
 
     @Test
@@ -35,7 +35,7 @@ public class DomainValidatorTest {
         expectedException.expectMessage("base64 must not be empty.");
 
         JsonData data = new JsonData();
-        validator.Validate(data);
+        validator.validate(data);
     }
 
     @Test
@@ -43,6 +43,6 @@ public class DomainValidatorTest {
         expectedException.expect(ApiException.class);
         expectedException.expectMessage("The object to be validated must not be null");
 
-        validator.Validate(null);
+        validator.validate(null);
     }
 }
