@@ -115,7 +115,7 @@ public class DiffServiceTest {
         DifferenceResponse response = service.getDifferences(id);
         assertEquals(id, response.getId());
         assertTrue(response.getEqual());
-        assertFalse(response.getEqualSize());
+        assertTrue(response.getEqualSize());
         assertEquals("123456", response.getLeft());
         assertEquals("123456", response.getRight());
     }
