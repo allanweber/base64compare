@@ -3,8 +3,7 @@ package com.waes.base64compare.infrastructure.service;
 import com.waes.base64compare.Application;
 import com.waes.base64compare.domain.dto.Difference;
 import com.waes.base64compare.domain.dto.DifferenceResponse;
-import com.waes.base64compare.domain.entity.DiffEntity;
-import com.waes.base64compare.domain.entity.Side;
+import com.waes.base64compare.domain.exception.ApiException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -30,23 +29,30 @@ public class DiffServiceIntegratedTest {
     public ExpectedException expectedException = ExpectedException.none();
 
     @Test
-    public void should_throw_NullPointerException_getting_difference_there_is_not_right_side() {
+    public void should_throw_ApiException_getting_difference_there_is_not_right_side() {
         Long id = 100L;
         service.saveLeft(id, "YWxsYW4gY2Fzc2lhbm8gd2ViZXI=");
 
         expectedException.expectMessage("The entity 100 does not have the Right side.");
-        expectedException.expect(NullPointerException.class);
+        expectedException.expect(ApiException.class);
         service.getDifferences(id);
     }
 
     @Test
-    public void should_throw_NullPointerException_getting_difference_there_is_not_left_side() {
+    public void should_throw_ApiException_getting_difference_there_is_not_left_side() {
         Long id = 100L;
         service.saveRight(id, "YWxsYW4gY2Fzc2lhbm8gd2ViZXI=");
 
         expectedException.expectMessage("The entity 100 does not have the Left side.");
-        expectedException.expect(NullPointerException.class);
+        expectedException.expect(ApiException.class);
         service.getDifferences(id);
+    }
+
+    @Test
+    public void should_throw_ApiException_getting_difference_and_id_does_not_exist() {
+        expectedException.expectMessage("Diff 100 id does not exist.");
+        expectedException.expect(ApiException.class);
+        service.getDifferences(100L);
     }
 
     @Test
