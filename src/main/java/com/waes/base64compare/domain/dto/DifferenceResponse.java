@@ -1,5 +1,6 @@
 package com.waes.base64compare.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.List;
@@ -40,6 +41,9 @@ public class DifferenceResponse {
      * List of differences if arrays are not equal but have same length.
      */
     private List<Difference> differences;
+
+    @JsonIgnore
+    private List<byte[]> sides;
 
     /**
      * Only possible constructor setting common data.
@@ -88,5 +92,13 @@ public class DifferenceResponse {
 
     public List<Difference> getDifferences() {
         return differences;
+    }
+
+    public List<byte[]> getSides() {
+        return sides;
+    }
+
+    public void setSides(List<byte[]> sides) {
+        this.sides = sides;
     }
 }
