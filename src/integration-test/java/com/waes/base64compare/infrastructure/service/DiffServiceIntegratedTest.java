@@ -10,7 +10,6 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Base64;
@@ -19,7 +18,6 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class DiffServiceIntegratedTest {
 
     @Autowired
@@ -40,26 +38,26 @@ public class DiffServiceIntegratedTest {
 
     @Test
     public void should_throw_ApiException_getting_difference_there_is_not_left_side() {
-        Long id = 100L;
+        Long id = 200L;
         service.saveRight(id, "YWxsYW4gY2Fzc2lhbm8gd2ViZXI=");
 
-        expectedException.expectMessage("The entity 100 does not have the Left side.");
+        expectedException.expectMessage("The entity 200 does not have the Left side.");
         expectedException.expect(ApiException.class);
         service.getDifferences(id);
     }
 
     @Test
     public void should_throw_ApiException_getting_difference_and_id_does_not_exist() {
-        expectedException.expectMessage("Diff 100 id does not exist.");
+        expectedException.expectMessage("Diff 300 id does not exist.");
         expectedException.expect(ApiException.class);
-        service.getDifferences(100L);
+        service.getDifferences(300L);
     }
 
     @Test
     public void should_save_a_new_entity_and_update_it() {
 
         String base64 = Base64.getEncoder().encodeToString("Allan Weber".getBytes());
-        Long id = 100L;
+        Long id = 400L;
         service.saveLeft(id, base64);
         service.saveRight(id, base64);
 
@@ -71,7 +69,7 @@ public class DiffServiceIntegratedTest {
     public void should_return_response_with_equal_and_equalSize_true_and_null_differences() {
 
         String base64 = Base64.getEncoder().encodeToString("Allan Weber".getBytes());
-        Long id = 100L;
+        Long id = 500L;
         service.saveLeft(id, base64);
         service.saveRight(id, base64);
 
@@ -87,7 +85,7 @@ public class DiffServiceIntegratedTest {
 
         String base64Left = Base64.getEncoder().encodeToString("Allan Weber".getBytes());
         String base64Right = Base64.getEncoder().encodeToString("Allan Cassiano Weber".getBytes());
-        Long id = 100L;
+        Long id = 600L;
         service.saveLeft(id, base64Left);
         service.saveRight(id, base64Right);
 
@@ -103,7 +101,7 @@ public class DiffServiceIntegratedTest {
 
         String base64Left = Base64.getEncoder().encodeToString("Allan Weber Cassiano".getBytes());
         String base64Right = Base64.getEncoder().encodeToString("Allan Cassiano Weber".getBytes());
-        Long id = 100L;
+        Long id = 700L;
         service.saveLeft(id, base64Left);
         service.saveRight(id, base64Right);
 
