@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -26,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @AutoConfigureMockMvc
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class DiffControllerIntegratedTest {
 
     @Autowired
@@ -40,7 +38,7 @@ public class DiffControllerIntegratedTest {
         JsonData data = new JsonData("123456");
         String json = mapper.writeValueAsString(data);
         mvc.perform(
-                MockMvcRequestBuilders.post("/v1/diff/123/left")
+                MockMvcRequestBuilders.post("/v1/diff/1/left")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
@@ -52,7 +50,7 @@ public class DiffControllerIntegratedTest {
         JsonData data = new JsonData();
         String json = mapper.writeValueAsString(data);
         MvcResult result = mvc.perform(
-                MockMvcRequestBuilders.post("/v1/diff/123/left")
+                MockMvcRequestBuilders.post("/v1/diff/2/left")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
@@ -67,7 +65,7 @@ public class DiffControllerIntegratedTest {
         JsonData data = new JsonData("123456");
         String json = mapper.writeValueAsString(data);
         mvc.perform(
-                MockMvcRequestBuilders.post("/v1/diff/123/right")
+                MockMvcRequestBuilders.post("/v1/diff/3/right")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
@@ -79,7 +77,7 @@ public class DiffControllerIntegratedTest {
         JsonData data = new JsonData();
         String json = mapper.writeValueAsString(data);
         MvcResult result = mvc.perform(
-                MockMvcRequestBuilders.post("/v1/diff/123/right")
+                MockMvcRequestBuilders.post("/v1/diff/4/right")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
@@ -92,11 +90,11 @@ public class DiffControllerIntegratedTest {
     @Test
     public void should_return_400_for_getResult_and_id_does_not_exist() throws Exception {
         MvcResult result = mvc.perform(
-                MockMvcRequestBuilders.get("/v1/diff/123"))
+                MockMvcRequestBuilders.get("/v1/diff/5"))
                 .andExpect(status().isBadRequest())
                 .andReturn();
 
-        assertTrue(result.getResponse().getContentAsString().contains("Diff 123 id does not exist."));
+        assertTrue(result.getResponse().getContentAsString().contains("Diff 5 id does not exist."));
     }
 
     @Test
@@ -104,7 +102,7 @@ public class DiffControllerIntegratedTest {
         JsonData data = new JsonData("%123%");
         String json = mapper.writeValueAsString(data);
         MvcResult result = mvc.perform(
-                MockMvcRequestBuilders.post("/v1/diff/123/left")
+                MockMvcRequestBuilders.post("/v1/diff/6/left")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
@@ -119,7 +117,7 @@ public class DiffControllerIntegratedTest {
         JsonData data = new JsonData("%123%");
         String json = mapper.writeValueAsString(data);
         MvcResult result = mvc.perform(
-                MockMvcRequestBuilders.post("/v1/diff/123/right")
+                MockMvcRequestBuilders.post("/v1/diff/7/right")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
@@ -136,18 +134,18 @@ public class DiffControllerIntegratedTest {
         String json = mapper.writeValueAsString(data);
 
         mvc.perform(
-                MockMvcRequestBuilders.post("/v1/diff/123/left")
+                MockMvcRequestBuilders.post("/v1/diff/8/left")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
 
         MvcResult result = mvc.perform(
-                MockMvcRequestBuilders.get("/v1/diff/123"))
+                MockMvcRequestBuilders.get("/v1/diff/8"))
                 .andExpect(status().isBadRequest())
                 .andReturn();
 
-        assertTrue(result.getResponse().getContentAsString().contains("The entity 123 does not have the Right side."));
+        assertTrue(result.getResponse().getContentAsString().contains("The entity 8 does not have the Right side."));
     }
 
     @Test
@@ -157,18 +155,18 @@ public class DiffControllerIntegratedTest {
         String json = mapper.writeValueAsString(data);
 
         mvc.perform(
-                MockMvcRequestBuilders.post("/v1/diff/123/right")
+                MockMvcRequestBuilders.post("/v1/diff/9/right")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
 
         MvcResult result = mvc.perform(
-                MockMvcRequestBuilders.get("/v1/diff/123"))
+                MockMvcRequestBuilders.get("/v1/diff/9"))
                 .andExpect(status().isBadRequest())
                 .andReturn();
 
-        assertTrue(result.getResponse().getContentAsString().contains("The entity 123 does not have the Left side."));
+        assertTrue(result.getResponse().getContentAsString().contains("The entity 9 does not have the Left side."));
     }
 
     @Test
@@ -178,23 +176,23 @@ public class DiffControllerIntegratedTest {
         String json = mapper.writeValueAsString(data);
 
         mvc.perform(
-                MockMvcRequestBuilders.post("/v1/diff/123/left")
+                MockMvcRequestBuilders.post("/v1/diff/10/left")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
 
         mvc.perform(
-                MockMvcRequestBuilders.post("/v1/diff/123/right")
+                MockMvcRequestBuilders.post("/v1/diff/10/right")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
 
         mvc.perform(
-                MockMvcRequestBuilders.get("/v1/diff/123"))
+                MockMvcRequestBuilders.get("/v1/diff/10"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(123))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(10))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.equal").value(true))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.equalSize").value(true))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.left").value(base64))
@@ -210,14 +208,14 @@ public class DiffControllerIntegratedTest {
         String jsonRight = mapper.writeValueAsString(new JsonData(base64Right));
 
         mvc.perform(
-                MockMvcRequestBuilders.post("/v1/diff/123/left")
+                MockMvcRequestBuilders.post("/v1/diff/11/left")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonLeft)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
 
         mvc.perform(
-                MockMvcRequestBuilders.post("/v1/diff/123/right")
+                MockMvcRequestBuilders.post("/v1/diff/11/right")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRight)
                         .accept(MediaType.APPLICATION_JSON))
@@ -225,9 +223,9 @@ public class DiffControllerIntegratedTest {
 
 
         mvc.perform(
-                MockMvcRequestBuilders.get("/v1/diff/123"))
+                MockMvcRequestBuilders.get("/v1/diff/11"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(123))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(11))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.equal").value(false))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.equalSize").value(false))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.left").value(base64Left))
@@ -243,14 +241,14 @@ public class DiffControllerIntegratedTest {
         String jsonRight = mapper.writeValueAsString(new JsonData(base64Right));
 
         mvc.perform(
-                MockMvcRequestBuilders.post("/v1/diff/123/left")
+                MockMvcRequestBuilders.post("/v1/diff/12/left")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonLeft)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
 
         mvc.perform(
-                MockMvcRequestBuilders.post("/v1/diff/123/right")
+                MockMvcRequestBuilders.post("/v1/diff/12/right")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRight)
                         .accept(MediaType.APPLICATION_JSON))
@@ -258,9 +256,9 @@ public class DiffControllerIntegratedTest {
 
 
         mvc.perform(
-                MockMvcRequestBuilders.get("/v1/diff/123"))
+                MockMvcRequestBuilders.get("/v1/diff/12"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(123))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(12))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.equal").value(false))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.equalSize").value(true))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.left").value(base64Left))

@@ -13,10 +13,30 @@ repositories {
 	mavenCentral()
 }
 
+sourceSets {
+	integrationTest {
+		java {
+			compileClasspath += main.output + test.output
+			runtimeClasspath += main.output + test.output
+			srcDir file('src/integration-test/java')
+		}
+		resources.srcDir file('src/integration-test/resources')
+	}
+}
+
+task integrationTest(type: Test) {
+	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+	classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'io.springfox:springfox-swagger2:2.9.2'
 	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
 	compile group: 'commons-codec', name: 'commons-codec', version: '1.12'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+configurations {
+	integrationTestImplementation.extendsFrom testImplementation
 }
